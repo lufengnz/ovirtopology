@@ -10,12 +10,12 @@
     
     - name: Creat a Directory
       ansible.builtin.file:
-        path: "{{ pwd.stdout }}/{{ ansible_date_time.date }}"
+        path: "{{ pwd.stdout }}/{{ ansible_date_time.date }}-{{ ansible_date_time.epoch }}"
         state: directory
     
     - name: local_dir variable
       ansible.builtin.set_fact:
-        local_dir: "{{ pwd.stdout }}/{{ ansible_date_time.date }}"
+        local_dir: "{{ pwd.stdout }}/{{ ansible_date_time.date }}-{{ ansible_date_time.epoch }}"
 
     - name: Debug local_dir variable
       debug:
