@@ -11,7 +11,7 @@
 - name: Copy Execution Files
   ansible.builtin.copy:
     src: kvmoverview.py
-    dest: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/kvmoverview.py
+    dest: "/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/kvmoverview.py"
     mode: '0755'
 
 - name: Execute Script

@@ -13,7 +13,7 @@
   roles:
     - role: ovirtengine
 
-- name: Capure Info from KVM hosts:
+- name: Capure Info from KVM hosts
   hosts: all, !engine
   roles:
     - role: ovirtopol

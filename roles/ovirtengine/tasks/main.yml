@@ -42,7 +42,7 @@
 - name: Copy the engine.json
   ansible.builtin.fetch:
     src: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/engine.json'
-    dest: '{{ hostvars['localhost']['local_dir'] }}/engine.json'
+    dest: "{{ hostvars['localhost']['local_dir'] }}/engine.json"
 
 - name: cleanup
   ansible.builtin.shell: |
