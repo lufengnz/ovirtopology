@@ -10,7 +10,7 @@
 
 - name: Execute Script
   ansible.builtin.command: 
-    cmd: "{{ hostvars['localhost']['local_dir'] }}/join2html.py"
+    cmd: "python3 {{ hostvars['localhost']['local_dir'] }}/join2html.py"
   args:
     chdir: "{{ hostvars['localhost']['local_dir'] }}"
 

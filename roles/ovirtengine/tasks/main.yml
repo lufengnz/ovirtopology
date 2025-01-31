@@ -26,7 +26,7 @@
     
 - name: Execute Script
   ansible.builtin.command: 
-    cmd: 'python {{ item.py_name }}'
+    cmd: 'python3 {{ item.py_name }}'
     creates: '{{ item.output }}'
   args:
     chdir: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/'
@@ -37,12 +37,14 @@
 - name: Copy the db_output.html
   ansible.builtin.fetch:
     src: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/db_output.html'
-    dest: '{{ local_dir }}/db_output.html'
+    dest: "{{ hostvars['localhost']['local_dir'] }}/db_output.html"
+    flat: yes
 
 - name: Copy the engine.json
   ansible.builtin.fetch:
     src: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/engine.json'
     dest: "{{ hostvars['localhost']['local_dir'] }}/engine.json"
+    flat: yes
 
 - name: cleanup
   ansible.builtin.shell: |

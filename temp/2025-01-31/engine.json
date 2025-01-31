@@ -1,0 +1,21 @@
+{
+    "Host Information": {
+        "Hostname": "bookable-10-145-228-251.us.oracle.com",
+        "IP Address": "10.145.228.251",
+        "Boot Time": "2025-01-23 07:41"
+    },
+    "Hardware": {
+        "Manufacturer": "oVirt",
+        "Product Name": "RHEL",
+        "Serial Number": "080020ff-ffff-ffff-ffff-0010e0bee464"
+    },
+    "Software": {
+        "OS Version": "Oracle Linux Server 8.10",
+        "Kernel Version": "5.15.0-303.171.5.2.el8uek.x86_64",
+        "oVirt Version": "ovirt-engine-4.5.5-1.31.el8.noarch"
+    },
+    "Storage & Memory": {
+        "Physical Memory": "16G",
+        "SELinux Mode": "Enforcing"
+    }
+}

@@ -6,7 +6,20 @@
     - name: Current Working Directory
       ansible.builtin.command:
         cmd: pwd
-      register: local_dir
+      register: pwd
+    
+    - name: Creat a Directory
+      ansible.builtin.file:
+        path: "{{ pwd.stdout }}/{{ ansible_date_time.date }}"
+        state: directory
+    
+    - name: local_dir variable
+      ansible.builtin.set_fact:
+        local_dir: "{{ pwd.stdout }}/{{ ansible_date_time.date }}"
+
+    - name: Debug local_dir variable
+      debug:
+        var: hostvars['localhost']['local_dir']
 
 - name: Caputre Info from oVirt engine
   hosts: engine

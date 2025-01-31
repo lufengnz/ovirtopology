@@ -16,20 +16,24 @@
 
 - name: Execute Script
   ansible.builtin.command: 
-    cmd: 'python /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/kvmoverview.py'
+    cmd: "python /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/kvmoverview.py"
   args:
-    chdir: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/'
+    chdir: "/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/"
+
+- ansible.builtin.debug:
+    msg: /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}
 
 - name: Catch Output File name
-  ansible.builtin.command:
-    cmd: ls /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/*.json
-  register: kvm_output
+  ansible.builtin.shell: "ls /var/tmp/ovirtopoloy-{{ ansible_date_time.date }} | grep json"
+  register: kvm_output_name
 
 - name: Copy the json Output File
   ansible.builtin.fetch:
-    src: "{{ kvm_output.stdout }}"
-    dest: '{{ local_dir }}/db_output.html'
+    src: "/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/{{ kvm_output_name.stdout }}"
+    dest: "{{ hostvars['localhost']['local_dir'] }}/{{ kvm_output_name.stdout }}"
+    flat: yes
 
-- name: cleanup
-  ansible.builtin.shell: |
-    rm -rf /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}
+- name: Cleanup old ovirtopoloy files
+  ansible.builtin.file:
+    path: "/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/"
+    state: absent
