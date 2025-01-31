@@ -1,0 +1,24 @@
+---
+
+- name: Set Current Working Directory as Output Target
+  hosts: localhost
+  tasks:
+    - name: Current Working Directory
+      ansible.builtin.command:
+        cmd: pwd
+      register: local_dir
+
+- name: Caputre Info from oVirt engine
+  hosts: engine
+  roles:
+    - role: ovirtengine
+
+- name: Capure Info from KVM hosts:
+  hosts: all, !engine
+  roles:
+    - role: ovirtopol
+
+- name: Local Process Output
+  hosts: localhost
+  roles: 
+    - role: local

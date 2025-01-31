@@ -2,7 +2,49 @@
 ---
 # tasks file for ovirtengine
 
-- name: RPM python3-psycopg2
-  package:
-    name: python3-psycopg2
+- name: Install RPMs
+  ansible.builtin.package:
+    name: "{{ item }}"
     state: present
+  loop:
+    - python3-psycopg2
+
+- name: Create a Temporary Working Directory
+  ansible.builtin.file:
+    path: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}'
+    state: directory
+    mode: '0755'
+
+- name: Copy Execution Files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/{{ item }}'
+    mode: '0755'
+  loop:
+    - dumpdb2html.py
+    - engineoverview.py
+    
+- name: Execute Script
+  ansible.builtin.command: 
+    cmd: 'python {{ item.py_name }}'
+    creates: '{{ item.output }}'
+  args:
+    chdir: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/'
+  loop:
+    - { py_name: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/dumpdb2html.py', output: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/db_output.html'}
+    - { py_name: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/engineoverview.py', output: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/engine.json'}
+
+- name: Copy the db_output.html
+  ansible.builtin.fetch:
+    src: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/db_output.html'
+    dest: '{{ local_dir }}/db_output.html'
+
+- name: Copy the engine.json
+  ansible.builtin.fetch:
+    src: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/engine.json'
+    dest: '{{ hostvars['localhost']['local_dir'] }}/engine.json'
+
+- name: cleanup
+  ansible.builtin.shell: |
+    rm -rf /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}
+    

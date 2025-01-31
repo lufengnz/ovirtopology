@@ -4,7 +4,6 @@ import psycopg2
 import os
 from psycopg2 import sql
 
-# Function to read database parameters from configuration file
 def get_db_params(config_file):
     db_params = {}
     try:
@@ -28,10 +27,8 @@ def get_db_params(config_file):
         print(f"Error reading database configuration: {e}")
     return db_params
 
-# Read database parameters from config file
 db_params = get_db_params('/etc/ovirt-engine/engine.conf.d/10-setup-database.conf')
 
-# Queries to retrieve data from the specified tables
 queries = {
     'public.cluster': "SELECT name AS CLUSTER, cluster_id AS CLUSTER_ID, description AS DESCRIPTION FROM public.cluster;",
     'public.vds_static': "SELECT vds_name AS KVM, vds_id AS VDS_ID, vds_unique_id AS VDS_UNIQ_ID, host_name AS HOST_NAME, cluster_id AS CLUSTER FROM public.vds_static;",
@@ -40,15 +37,10 @@ queries = {
 
 def fetch_data(query):
     try:
-        # Establish a connection to the database
         with psycopg2.connect(**db_params) as conn:
-            # Create a cursor object
             with conn.cursor() as cur:
-                # Execute the SQL query
                 cur.execute(query)
-                # Fetch all rows from the executed query
                 rows = cur.fetchall()
-                # Retrieve column names from the cursor description
                 col_names = [desc[0] for desc in cur.description]
                 return col_names, rows
     except Exception as e:
@@ -65,13 +57,11 @@ def save_to_html(data, filename="db_output.html"):
                 html_file.write(f"<h2>Table: {table}</h2>\n")
                 html_file.write("<table border='1'><tr>")
                 
-                # Write table headers
                 headers = rows[0].keys() if rows else []
                 for header in headers:
                     html_file.write(f"<th>{header}</th>")
                 html_file.write("</tr>\n")
                 
-                # Write table rows
                 for row in rows:
                     html_file.write("<tr>")
                     for value in row.values():

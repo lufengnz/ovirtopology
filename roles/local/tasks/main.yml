@@ -1,3 +1,23 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for local
+
+- name: Copy Python Script
+  ansible.builtin.copy:
+    src: join2html.py
+    dest: '{{ hostvars['localhost']['local_dir'] }}/join2html.py'
+    mode: '0755'
+
+- name: Execute Script
+  ansible.builtin.command: 
+    cmd: '{{ hostvars['localhost']['local_dir'] }}/join2html.py'
+  args:
+    chdir: "{{ hostvars['localhost']['local_dir'] }}"
+
+- name: Clean up
+  ansible.builtin.shell:
+    cmd: 'rm -f {{ hostvars['localhost']['local_dir'] }}/join2html.py'
+
+- name: Bring Message
+  ansible.builtin.debug: 
+    msg: "Output HTML Files are at" "{{ hostvars['localhost']['local_dir'] }}"

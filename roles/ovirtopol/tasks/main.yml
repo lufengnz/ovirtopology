@@ -1,3 +1,35 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for ovirtopol
+
+- name: Create a Temporary Working Directory
+  ansible.builtin.file:
+    path: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}'
+    state: directory
+    mode: '0755'
+
+- name: Copy Execution Files
+  ansible.builtin.copy:
+    src: kvmoverview.py
+    dest: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/kvmoverview.py
+    mode: '0755'
+
+- name: Execute Script
+  ansible.builtin.command: 
+    cmd: 'python /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/kvmoverview.py'
+  args:
+    chdir: '/var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/'
+
+- name: Catch Output File name
+  ansible.builtin.command:
+    cmd: ls /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}/*.json
+  register: kvm_output
+
+- name: Copy the json Output File
+  ansible.builtin.fetch:
+    src: "{{ kvm_output.stdout }}"
+    dest: '{{ local_dir }}/db_output.html'
+
+- name: cleanup
+  ansible.builtin.shell: |
+    rm -rf /var/tmp/ovirtopoloy-{{ ansible_date_time.date }}

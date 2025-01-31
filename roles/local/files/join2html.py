@@ -97,7 +97,6 @@ def generate_html_output(json_files):
     for json_file in json_files:
         json_name = os.path.basename(json_file).replace('.json', '').replace('.html', '')
         
-        # Modify db_output.html to be a hyperlink
         if json_file == "db_output.html":
             html_content += f'<div class="tab"><a href="{json_file}" target="_blank">{json_name}</a></div>'
         else:
@@ -108,7 +107,6 @@ def generate_html_output(json_files):
     for json_file in json_files:
         json_name = os.path.basename(json_file).replace('.json', '').replace('.html', '')
         if json_file == "db_output.html":
-            # Skip adding iframe for db_output.html, it is now a hyperlink
             continue
         elif json_file.endswith('.html'):
             iframe_class = 'max-iframe' if 'db_output.html' in json_file else 'fullpage'
@@ -152,8 +150,7 @@ def generate_html_output(json_files):
         </script>
     </body>
     </html>
-    '''
-    
+    '''    
     return html_content
 
 json_files = [f for f in os.listdir('.') if f.endswith('.json')]
